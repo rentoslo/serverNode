@@ -1,28 +1,37 @@
 module.exports = {
-  up: (queryInterface, DataTypes) => queryInterface.createTable('Users', {
+  up: (queryInterface, DataTypes) => queryInterface.createTable('Enderecos', {
     id: {
       allowNull: false,
       type: DataTypes.UUID,
       defaultValue: DataTypes.UUIDV4,
       primaryKey: true,
     },
-    name: {
+    userId: {
+      type: DataTypes.UUID,
       allowNull: false,
-      type: DataTypes.STRING,
-    },
-    email: {
-      allowNull: false,
-      type: DataTypes.STRING,
-      validate: {
-        isEmail: true,
+      references: {
+        model: 'Users',
+        key: 'id',
       },
     },
-    password: {
-      allowNull: false,
+    cep: {
       type: DataTypes.STRING,
-      // validate: {
-      //   isNumeric: true,
-      // },
+      allowNull: false,
+    },
+    rua: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    numero: {
+      type: DataTypes.STRING,
+    },
+    bairro: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    estado: {
+      type: DataTypes.STRING,
+      allowNull: false,
     },
     createdAt: {
       allowNull: false,
@@ -34,5 +43,5 @@ module.exports = {
     },
   }),
 
-  down: (queryInterface) => queryInterface.dropTable('Users'),
+  down: (queryInterface) => queryInterface.dropTable('Enderecos'),
 };

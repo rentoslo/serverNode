@@ -1,4 +1,4 @@
-require("dotenv-safe").config();
+require('dotenv-safe').config();
 const express = require('express');
 const bodyParser = require('body-parser');
 const routes = require('./src/routes');
@@ -6,10 +6,11 @@ const routes = require('./src/routes');
 const app = express();
 
 app.use(bodyParser.json());
-app.use(routes);
+
+routes.forEach((route) => app.use(route));
 
 app.listen(3333, () => {
-    console.log('Servidor online porta 3333')
+  console.log('Servidor online porta 3333');
 });
 
 // var jwt = require('jsonwebtoken');
@@ -161,6 +162,3 @@ app.listen(3333, () => {
 //     });
 
 // });
-
-
-
