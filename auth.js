@@ -1,32 +1,32 @@
 // auth.js
-var passport = require("passport");
-var passportJWT = require("passport-jwt");
-var users = require("./users.js");
-var cfg = require("./config.js");
-var ExtractJwt = passportJWT.ExtractJwt;
-var Strategy = passportJWT.Strategy;
-var params = {
-    secretOrKey: cfg.jwtSecret,
-    jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken()
-    // jwtFromRequest: ExtractJwt.fromAuthHeader()
+const passport = require('passport');
+const passportJWT = require('passport-jwt');
+const users = require('../serverNode/src/controllers/user');
+const cfg = require('./config.js');
+
+const { ExtractJwt } = passportJWT;
+const { Strategy } = passportJWT;
+const params = {
+  secretOrKey: cfg.jwtSecret,
+  jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+  // jwtFromRequest: ExtractJwt.fromAuthHeader()
 };
 
 module.exports = function () {
-    var strategy = new Strategy(params, function (payload, done) {
-        var user = users[payload.id] || null;
-        if (user) {
-            return done(null, { id: user.id });
-        } else {
-            return done(new Error("User not found"), null);
-        }
-    });
-    passport.use(strategy);
-    return {
-        initialize: function () {
-            return passport.initialize();
-        },
-        authenticate: function () {
-            return passport.authenticate("jwt", cfg.jwtSession);
-        }
-    };
+  const strategy = new Strategy(params, ((payload, done) => {
+    const user = users[payload.id] || null;
+    if (user) {
+      return done(null, { id: user.id });
+    }
+    return done(new Error('User not found'), null);
+  }));
+  passport.use(strategy);
+  return {
+    initialize() {
+      return passport.initialize();
+    },
+    authenticate() {
+      return passport.authenticate('jwt', cfg.jwtSession);
+    },
+  };
 };
