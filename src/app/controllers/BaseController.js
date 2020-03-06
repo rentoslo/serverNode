@@ -1,5 +1,8 @@
 const { Router } = require('express');
 const bcrypt = require('bcrypt');
+const mailer = require('nodemailer');
+const configMailer = require('../../config/nodemailer');
+
 
 class BaseController {
   constructor(path, modelDB) {
@@ -77,8 +80,24 @@ class BaseController {
       await this.model.create(
         { ...req.body },
       );
-      return res.json({
-        message: 'sucesso',
+      // enviando mensagem nodemail
+      const transporter = mailer.createTransport(configMailer);
+      const message = {
+        from: 'rentoslo@yahoo.com',
+        to: 'matheusikatec@ikatec.com',
+        subject: 'Bem vindo à Ikatec',
+        text: 'Olá! Seja bem vindo!',
+      };
+      transporter.sendMail(message, (error) => {
+        console.log('message'); console.log(message);
+        if (error) {
+          return res.status(500).json({
+            message: error.message,
+          });
+        }
+        return res.json({
+          message: 'sucesso',
+        });
       });
     } catch (err) {
       return res.status(500).json({
@@ -116,30 +135,6 @@ class BaseController {
       });
     }
   }
-
-  // async changePass(req, res) {
-  //   console.log('entrei no changepass');
-  //   const { id } = req.body;
-  //   console.log(id);
-  //   try {
-  //     await this.model.findOne({
-  //       where: {
-  //         id,
-  //       },
-  //     });
-
-  //     await this.model.update(
-  //       bcrypt.hash(senhaParaSalvar, salt, (err, hash) => {
-  //       }),
-  //     );
-
-  //     return res.status(200).json('response');
-  //   } catch (error) {
-  //     return res.status(500).json({
-  //       message: error.toString(),
-  //     });
-  //   }
-  // }
 
   routes() {
     const route = Router();

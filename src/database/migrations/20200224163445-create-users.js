@@ -16,6 +16,7 @@ module.exports = {
       validate: {
         isEmail: true,
       },
+      primaryKey: true,
     },
     password: {
       allowNull: false,

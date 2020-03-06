@@ -1,9 +1,8 @@
 const jwt = require('jsonwebtoken');
-const model = require('../../app/models/');
+const model = require('../app/models/');
 
 module.exports = (req, res, next) => {
   console.log('entrei login');
-  if (req.body.email && req.body.password) {
   //   const { email } = req.body;
   //   const { password } = req.body;
   //   console.log(email, password);
